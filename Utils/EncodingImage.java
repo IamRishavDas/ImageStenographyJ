@@ -6,13 +6,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Constants.Constants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class EncodingImage {
-
-    public static int rect_width  = 20;
-    public static int rect_height = 20;
 
     private static Node[] tempImage;
 
@@ -81,8 +80,8 @@ public class EncodingImage {
     public static void createNewImage(int[][] data, String filename) {
         if (data == null) return;
     
-        int image_width = data.length * rect_width;
-        int image_height = data[0].length * rect_height;
+        int image_width = data.length * Constants.RECT_WIDTH;
+        int image_height = data[0].length * Constants.RECT_HEIGHT;
     
         BufferedImage new_image = new BufferedImage(image_width, image_height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = new_image.createGraphics();
@@ -99,10 +98,10 @@ public class EncodingImage {
             for (int j = 0; j < data[0].length; j++) {
                 // System.out.print(data[i][j] + " ");
                 if (!isEven(data[i][j])) {
-                    g.fillRect(i * rect_width, j * rect_height, rect_width, rect_height);
+                    g.fillRect(i * Constants.RECT_WIDTH, j * Constants.RECT_HEIGHT, Constants.RECT_WIDTH, Constants.RECT_HEIGHT);
                 } else {
                     g.setColor(Color.red);
-                    g.fillRect(i * rect_width, j * rect_height, rect_width, rect_height);
+                    g.fillRect(i * Constants.RECT_WIDTH, j * Constants.RECT_HEIGHT, Constants.RECT_WIDTH, Constants.RECT_HEIGHT);
                     g.setColor(Color.black);
                 }
             } /*System.out.println();*/

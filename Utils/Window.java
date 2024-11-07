@@ -12,7 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Constants.Constants;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -59,7 +62,7 @@ public class Window {
 
         label = new JLabel(scaledIcon);
         label.setPreferredSize(new Dimension(scaledWidth, scaledHeight));
-        frame.add(label/*, BorderLayout.CENTER*/);
+        panel.add(label/*, BorderLayout.CENTER*/);
         panel.revalidate();
         panel.repaint();
         frame.revalidate();
@@ -68,7 +71,7 @@ public class Window {
 
     public static void removePreviousImageFromPanel() {
         if (Window.label == null) {
-            consoleLabel.setText("EdittorFrame.JLabel is null!");
+            // consoleLabel.setText("EdittorFrame.JLabel is null!");
             return;
         }
         JLabel component = Window.label;
@@ -80,7 +83,7 @@ public class Window {
     public Window() {
         panel = new JPanel();
         consolePanel = new JPanel();
-        consoleLabel = new JLabel("console label...");
+        consoleLabel = new JLabel("");
         openImageButton = new JButton("Open");
         writeButton = new JButton("Open text area");
         saveButton = new JButton("Save");
@@ -97,7 +100,10 @@ public class Window {
 
         consolePanel.add(consoleLabel);
 
+        consolePanel.setBackground(Color.GRAY);
+
         consoleLabel.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 16));
+        consoleLabel.setForeground(Color.BLACK);
 
         openImageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -199,7 +205,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 if(Window.image == null) return;
-                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, EncodingImage.rect_width, EncodingImage.rect_height));
+                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, Constants.RECT_WIDTH, Constants.RECT_HEIGHT));
                 JOptionPane.showMessageDialog(null, text);
             }
         });
@@ -209,18 +215,18 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(Window.image == null) return;
-                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, EncodingImage.rect_width, EncodingImage.rect_height));
+                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, Constants.RECT_WIDTH, Constants.RECT_HEIGHT));
                 CreateFile.createFile(JOptionPane.showInputDialog("Name the file with extension: "), text);
             }
             
         });
 
-        frame = new JFrame("Digital Stenography");
+        frame = new JFrame("Digital Photo Stenography");
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
-        frame.add(panel, BorderLayout.NORTH);
+        frame.add(panel, BorderLayout.CENTER);
         frame.add(consolePanel, BorderLayout.SOUTH);
         frame.setResizable(false);
         frame.setVisible(true);

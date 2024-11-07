@@ -1,1 +1,0 @@
-public class test {     public static void main(string[] args) {         var binmatrix = texttobinary.asciiarraytobinaryarray(texttobinary.getasciiarray("i love you"));         for(int[] i: binmatrix){             for(int j: i){                 system.out.print(j + " ");             }             system.out.println();         }     } }

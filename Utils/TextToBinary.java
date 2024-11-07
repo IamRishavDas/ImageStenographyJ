@@ -1,9 +1,9 @@
 package Utils;
 
+import Constants.Constants;
+
 public class TextToBinary {
 
-    public static final int BIT_SIZE = 9; // although it is 8 but, 9 for parsing convinience (multiple of 3)
-    public static final int BINARY_BASE = 2;
 
     public static int[] getAsciiArray(String text) {
         text = text.toLowerCase(); 
@@ -17,11 +17,11 @@ public class TextToBinary {
     }
 
     private static int[] convertAsciiBase(int ascii) {
-        int[] binary = new int[TextToBinary.BIT_SIZE];
+        int[] binary = new int[Constants.BIT_SIZE];
         int index = binary.length - 1;
         while (ascii != 0) {
-            binary[index--] = ascii % TextToBinary.BINARY_BASE;
-            ascii /= TextToBinary.BINARY_BASE;
+            binary[index--] = ascii % Constants.BINARY_BASE;
+            ascii /= Constants.BINARY_BASE;
         }
         return binary;
     }
