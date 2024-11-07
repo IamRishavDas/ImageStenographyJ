@@ -20,9 +20,9 @@ public class EncodingImage {
     private static int imageHeight = 0;
 
     private static void printDetails() {
-        System.out.println("Image width: " + imageWidth);
-        System.out.println("Image height: " + imageHeight);
-        System.out.println("Color-Image size: " + tempImage.length);
+        Window.consoleLabel.setText("Image width: "      + imageWidth  +
+                                    "Image height: "     + imageHeight + 
+                                    "Color-Image size: " + tempImage.length);
     }
 
     public static Node[] loadImage(BufferedImage image) {
@@ -59,7 +59,7 @@ public class EncodingImage {
         int colData = data[0].length;
         int dataLength = rowData * colData;
 
-        System.out.println("length: " + dataLength);
+        Window.consoleLabel.setText("length: " + dataLength);
 
         // System.out.println("red: " + red + " green: " + green + " blue: " + blue);
 
@@ -94,14 +94,18 @@ public class EncodingImage {
         // Set color for rectangles
         g.setColor(Color.black);
     
-        System.out.println("Writing data in new image...");
+        Window.consoleLabel.setText("Writing data in new image...");
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[0].length; j++) {
-                System.out.print(data[i][j] + " ");
+                // System.out.print(data[i][j] + " ");
                 if (!isEven(data[i][j])) {
                     g.fillRect(i * rect_width, j * rect_height, rect_width, rect_height);
+                } else {
+                    g.setColor(Color.red);
+                    g.fillRect(i * rect_width, j * rect_height, rect_width, rect_height);
+                    g.setColor(Color.black);
                 }
-            } System.out.println();
+            } /*System.out.println();*/
         }
     
         g.dispose();
@@ -109,9 +113,9 @@ public class EncodingImage {
         try {
             File outputfile = new File(filename + ".png");
             ImageIO.write(new_image, "png", outputfile);
-            System.out.println("Image saved as " + outputfile.getAbsolutePath());
+            Window.consoleLabel.setText("Image saved as " + outputfile.getAbsolutePath());
         } catch (IOException e) {
-            System.err.println("Error saving the image: " + e.getMessage());
+            Window.consoleLabel.setText("Error saving the image: " + e.getMessage());
         }
     }
    

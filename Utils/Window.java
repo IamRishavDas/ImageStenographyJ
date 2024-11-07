@@ -12,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -22,8 +24,13 @@ import java.awt.image.BufferedImage;
 public class Window {
 
     private static JPanel panel;
+    private static JPanel consolePanel;
+    protected static JLabel consoleLabel;
+
     private static JFrame frame;
     private static JLabel label;
+
+
     private static String text = " ";
     static BufferedImage image;
 
@@ -52,7 +59,7 @@ public class Window {
 
         label = new JLabel(scaledIcon);
         label.setPreferredSize(new Dimension(scaledWidth, scaledHeight));
-        panel.add(label);
+        frame.add(label/*, BorderLayout.CENTER*/);
         panel.revalidate();
         panel.repaint();
         frame.revalidate();
@@ -61,7 +68,7 @@ public class Window {
 
     public static void removePreviousImageFromPanel() {
         if (Window.label == null) {
-            System.out.println("EdittorFrame.JLabel is null!");
+            consoleLabel.setText("EdittorFrame.JLabel is null!");
             return;
         }
         JLabel component = Window.label;
@@ -72,6 +79,8 @@ public class Window {
 
     public Window() {
         panel = new JPanel();
+        consolePanel = new JPanel();
+        consoleLabel = new JLabel("console label...");
         openImageButton = new JButton("Open");
         writeButton = new JButton("Open text area");
         saveButton = new JButton("Save");
@@ -85,6 +94,10 @@ public class Window {
         panel.add(createNewImageButton);
         panel.add(showHiddenText);
         panel.add(showHiddenTextInNewFile);
+
+        consolePanel.add(consoleLabel);
+
+        consoleLabel.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 16));
 
         openImageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -136,6 +149,7 @@ public class Window {
                             if (label.getIcon() instanceof ImageIcon) {
                                 image = ((ImageIcon) label.getIcon()).getImage();
                             } else {
+                                consoleLabel.setText("Unsupported image format in label");
                                 throw new UnsupportedOperationException("Unsupported image format in label");
                             }
 
@@ -153,7 +167,7 @@ public class Window {
                             File fileToSave = fileChooser.getSelectedFile();
                             ImageIO.write(bufferedImage, "png", fileToSave);
 
-                            label.setText("Image saved successfully!");
+                            consoleLabel.setText("Image saved successfully!");
                         } catch (IOException ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(null, "Error saving image: " + ex.getMessage(), "Error",
@@ -202,10 +216,12 @@ public class Window {
         });
 
         frame = new JFrame("Digital Stenography");
+        frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
-        frame.add(panel);
+        frame.add(panel, BorderLayout.NORTH);
+        frame.add(consolePanel, BorderLayout.SOUTH);
         frame.setResizable(false);
         frame.setVisible(true);
     }

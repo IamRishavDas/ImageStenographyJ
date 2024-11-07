@@ -12,9 +12,9 @@ public class CreateFile {
 
         try (FileWriter writer = new FileWriter(filename)) {
             writer.write(fileContent);
-            System.out.println("Successfully wrote content to " + filename);
+            Window.consoleLabel.setText("Successfully wrote content to " + filename);
         } catch (IOException e) {
-            System.err.println("An error occurred while writing to the file: " + e.getMessage());
+            Window.consoleLabel.setText("An error occurred while writing to the file: " + e.getMessage());
         }
     }
 
