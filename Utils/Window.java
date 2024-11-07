@@ -32,6 +32,7 @@ public class Window {
     private JButton writeButton;
     private JButton createNewImageButton;
     private JButton showHiddenText;
+    private JButton showHiddenTextInNewFile;
 
     public static void displayImage(BufferedImage img) {
         if (img == null)
@@ -76,12 +77,14 @@ public class Window {
         saveButton = new JButton("Save");
         createNewImageButton = new JButton("Create image");
         showHiddenText = new JButton("Show hidden text");
+        showHiddenTextInNewFile = new JButton("Show hidden text in new file");
 
         panel.add(openImageButton);
         panel.add(writeButton);
         panel.add(saveButton);
         panel.add(createNewImageButton);
         panel.add(showHiddenText);
+        panel.add(showHiddenTextInNewFile);
 
         openImageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -182,10 +185,20 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 if(Window.image == null) return;
-                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, 20, 20));
-                // System.out.println("The hidded text is: " + text);
+                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, EncodingImage.rect_width, EncodingImage.rect_height));
                 JOptionPane.showMessageDialog(null, text);
             }
+        });
+
+        showHiddenTextInNewFile.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(Window.image == null) return;
+                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, EncodingImage.rect_width, EncodingImage.rect_height));
+                CreateFile.createFile(JOptionPane.showInputDialog("Name the file with extension: "), text);
+            }
+            
         });
 
         frame = new JFrame("Digital Stenography");

@@ -11,6 +11,9 @@ import java.awt.Graphics2D;
 
 public class EncodingImage {
 
+    public static int rect_width  = 20;
+    public static int rect_height = 20;
+
     private static Node[] tempImage;
 
     private static int imageWidth = 0;
@@ -78,8 +81,6 @@ public class EncodingImage {
     public static void createNewImage(int[][] data, String filename) {
         if (data == null) return;
     
-        int rect_width = 20;
-        int rect_height = 20;
         int image_width = data.length * rect_width;
         int image_height = data[0].length * rect_height;
     
