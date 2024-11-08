@@ -58,27 +58,57 @@ public class EncodingImage {
         int colData = data[0].length;
         int dataLength = rowData * colData;
 
-        Window.consoleLabel.setText("length: " + dataLength);
+        if(dataLength >= image.length) Window.consoleLabel.setText("Image is too small to hide the data!");
 
-        // System.out.println("red: " + red + " green: " + green + " blue: " + blue);
+        Window.consoleLabel.setText("Data length: " + dataLength + " Node Image size: " + image.length);
+        int[][] dataLengthArray = TextToBinary.asciiArrayToBinaryArray(TextToBinary.getAsciiArray(String.valueOf(dataLength)));
+        DecodingImage.printData(dataLengthArray);
 
-        // int red = Integer.parseInt(String.valueOf(node.getColor().getRed()), 16);
-        // int green = Integer.parseInt(String.valueOf(node.getColor().getGreen()), 16);
-        // int blue = Integer.parseInt(String.valueOf(node.getColor().getBlue()), 16);
 
-        // for (Node node : tempImage) {
-        //     System.out.println(node);
+        // hiding the number at first, which represents the no of bits to be hidden
+        int imageIndex = 0;
+        for(int i=0; i<dataLengthArray.length; i++){
+            for(int j=0; j<dataLengthArray[0].length; j++){
+                if(!isEven(dataLengthArray[i][j])){
+                    Color color = image[imageIndex].getColor();
+                    int red   = color.getRed();
+                    int green = color.getGreen();
+                    int blue  = color.getBlue();
+                    if(isEven(red)) image[imageIndex].setColor(new Color(++red, green, blue));
+                    imageIndex++;
+                }
+            }
+        }
 
-        //     int red = node.getColor().getRed();
-        //     int green = node.getColor().getGreen();
-        //     int blue = node.getColor().getBlue();
+        // hiding the actual data
+        for(int i=0; i<data.length; i++){
+            for(int j=0; j<data[0].length; j++){
+                if(!isEven(data[i][j])){
+                    Color color = image[imageIndex].getColor();
+                    int red   = color.getRed();
+                    int green = color.getGreen();
+                    int blue  = color.getBlue();
+                    if(isEven(red)) image[imageIndex].setColor(new Color(++red, green, blue));
+                    imageIndex++;
+                }
+            }
+        }
 
-        // }
+        displayEncodedImageOnFrame(image);
 
     }
 
-    public static void createNewImage(int[][] data, String filename) {
-        if (data == null) return;
+    private static void displayEncodedImageOnFrame(Node[] image){
+        BufferedImage new_image = new BufferedImage(EncodingImage.imageWidth, EncodingImage.imageHeight, BufferedImage.TYPE_INT_RGB);
+        for(Node i: image){
+            new_image.setRGB(i.getPosX(), i.getPosY(), i.getColor().getRGB());
+        }
+        Window.displayImage(new_image);
+    }
+
+    public static BufferedImage createNewImage(int[][] data, String filename) {
+        if (data == null) return null;
+        if(filename == null || filename.equals(" ")) filename = "generatedImage";
     
         int image_width = data.length * Constants.RECT_WIDTH;
         int image_height = data[0].length * Constants.RECT_HEIGHT;
@@ -116,6 +146,9 @@ public class EncodingImage {
         } catch (IOException e) {
             Window.consoleLabel.setText("Error saving the image: " + e.getMessage());
         }
+
+        Window.consoleLabel.setText("Save the image with the .png extension will help for further use...");
+        return new_image;
     }
    
 }

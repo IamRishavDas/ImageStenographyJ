@@ -4,7 +4,7 @@ import Constants.Constants;
 
 public class BinaryToText {
 
-    private static int binaryToDecimal(int[] binary){
+    public static int binaryToDecimal(int[] binary){
         int decimal = 0;
         for(int i=0; i<binary.length; i++){
             decimal += binary[i] * Math.pow(Constants.BINARY_BASE, Constants.BIT_SIZE-1-i);

@@ -33,13 +33,14 @@ public class Window {
     private static JFrame frame;
     private static JLabel label;
 
-
     private static String text = " ";
     static BufferedImage image;
 
     private JButton openImageButton;
     private JButton saveButton;
     private JButton writeButton;
+    private JButton encodeButton;
+    private JButton decodeButton;
     private JButton createNewImageButton;
     private JButton showHiddenText;
     private JButton showHiddenTextInNewFile;
@@ -62,7 +63,8 @@ public class Window {
 
         label = new JLabel(scaledIcon);
         label.setPreferredSize(new Dimension(scaledWidth, scaledHeight));
-        panel.add(label/*, BorderLayout.CENTER*/);
+        panel.add(label/* , BorderLayout.CENTER */);
+
         panel.revalidate();
         panel.repaint();
         frame.revalidate();
@@ -83,10 +85,12 @@ public class Window {
     public Window() {
         panel = new JPanel();
         consolePanel = new JPanel();
-        consoleLabel = new JLabel("");
+        consoleLabel = new JLabel("First write a text which will be hidded in any image..");
         openImageButton = new JButton("Open");
-        writeButton = new JButton("Open text area");
+        writeButton = new JButton("Write Text");
         saveButton = new JButton("Save");
+        encodeButton = new JButton("Encode");
+        decodeButton = new JButton("Decode");
         createNewImageButton = new JButton("Create image");
         showHiddenText = new JButton("Show hidden text");
         showHiddenTextInNewFile = new JButton("Show hidden text in new file");
@@ -94,6 +98,8 @@ public class Window {
         panel.add(openImageButton);
         panel.add(writeButton);
         panel.add(saveButton);
+        panel.add(encodeButton);
+        panel.add(decodeButton);
         panel.add(createNewImageButton);
         panel.add(showHiddenText);
         panel.add(showHiddenTextInNewFile);
@@ -102,7 +108,7 @@ public class Window {
 
         consolePanel.setBackground(Color.GRAY);
 
-        consoleLabel.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 16));
+        consoleLabel.setFont(new Font("Cascadia Mono", Font.LAYOUT_LEFT_TO_RIGHT, 16));
         consoleLabel.setForeground(Color.BLACK);
 
         openImageButton.addActionListener(new ActionListener() {
@@ -121,8 +127,6 @@ public class Window {
                         ex.printStackTrace();
                     }
                 }
-                // EncodingImage.loadImage(image);
-                // EncodingImage.encode(EncodingImage.loadImage(image), TextToBinary.asciiArrayToBinaryArray(TextToBinary.getAsciiArray(text)));
             }
         });
 
@@ -131,10 +135,10 @@ public class Window {
             public void actionPerformed(ActionEvent e) {
                 text = JOptionPane.showInputDialog("Input the text: ");
                 text = text.trim();
-                if(text == null || text.equals(" ")){
+                if (text == null || text.equals(" ")) {
                     JOptionPane.showMessageDialog(null, "Not a valid text");
                 }
-            } 
+            }
         });
 
         saveButton.addActionListener(new ActionListener() {
@@ -191,21 +195,49 @@ public class Window {
             }
         });
 
+        encodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(Window.label == null || text == null) return;
+                // EncodingImage.loadImage(image); 
+                EncodingImage.encode(EncodingImage.loadImage(image), TextToBinary.asciiArrayToBinaryArray(TextToBinary.getAsciiArray(text)));
+            }
+        });
+
+
+        decodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(Window.label == null || text == null) return;
+                String text = DecodingImage.decodeImage(image);
+                // JOptionPane.showMessageDialog(null, text);
+            }
+        });
+
+
         createNewImageButton.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Window.text == null || Window.text.equals(" ")) return;
-                EncodingImage.createNewImage(TextToBinary.asciiArrayToBinaryArray(TextToBinary.getAsciiArray(text)), "new");
+                if (Window.text == null || Window.text.equals(" "))
+                    return;
+                BufferedImage image = EncodingImage.createNewImage(TextToBinary.asciiArrayToBinaryArray(TextToBinary.getAsciiArray(text)),
+                        "new");
+                Window.image = image; // updating the current Window.image state with new image
+                Window.displayImage(image);
             }
-            
+
         });
 
         showHiddenText.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
-                if(Window.image == null) return;
-                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, Constants.RECT_WIDTH, Constants.RECT_HEIGHT));
+            public void actionPerformed(ActionEvent e) {
+                if (Window.image == null){
+                    Window.consoleLabel.setText("Window.image is null!!");
+                    return;
+                }
+                String text = BinaryToText.binaryToText(
+                        DecodingImage.parseImageToData(Window.image, Constants.RECT_WIDTH, Constants.RECT_HEIGHT));
                 JOptionPane.showMessageDialog(null, text);
             }
         });
@@ -214,11 +246,13 @@ public class Window {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Window.image == null) return;
-                String text = BinaryToText.binaryToText(DecodingImage.parseImageToData(Window.image, Constants.RECT_WIDTH, Constants.RECT_HEIGHT));
+                if (Window.image == null)
+                    return;
+                String text = BinaryToText.binaryToText(
+                        DecodingImage.parseImageToData(Window.image, Constants.RECT_WIDTH, Constants.RECT_HEIGHT));
                 CreateFile.createFile(JOptionPane.showInputDialog("Name the file with extension: "), text);
             }
-            
+
         });
 
         frame = new JFrame("Digital Photo Stenography");

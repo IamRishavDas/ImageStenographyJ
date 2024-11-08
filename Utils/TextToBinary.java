@@ -6,7 +6,7 @@ public class TextToBinary {
 
 
     public static int[] getAsciiArray(String text) {
-        text = text.toLowerCase(); 
+        // text = text.toLowerCase(); 
         char[] charArray = text.toCharArray();
         int[] asciiArray = new int[charArray.length];
         int i = 0;
